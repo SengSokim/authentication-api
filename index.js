@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 require("dotenv").config();
-
+const session = require('express-session')
 const dbConnect = require("./db/dbConnect")
 
 const routes = require('./routes/routes')
@@ -14,10 +14,19 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(cors({
     credentials: true,
-    origin: ['http://localhost:3001', 'http://localhost:8080', 'http://localhost:4200']
+    origin: ['http://localhost:3001', 'https://twittorr.netlify.app']
 }))
 
-
+app.use(session({
+    secret: 'street',
+    resave: true,
+    saveUninitialized: true,
+    proxy: true,
+    cookie: {
+        sameSite:'none',
+        secure:true
+    }
+}))
 app.use(cookieParser())
 
 app.use('/api', routes)
